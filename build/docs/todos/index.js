@@ -1,9 +1,7 @@
+"use strict";
 const getTodos = require('./get-todos');
-
 module.exports = {
     paths: {
-        '/todos': {
-            ...getTodos
-        }
+        '/todos': Object.assign({}, getTodos)
     }
 };

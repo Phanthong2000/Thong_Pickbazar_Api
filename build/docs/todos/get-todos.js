@@ -1,15 +1,16 @@
+"use strict";
 module.exports = {
     // method of operation
     get: {
-        tags: ['Todo CRUD operations'], // operation's tag.
-        description: 'Get todos', // operation's desc.
-        operationId: 'getTodos', // unique operation id.
-        parameters: [], // expected params.
+        tags: ['Todo CRUD operations'],
+        description: 'Get todos',
+        operationId: 'getTodos',
+        parameters: [],
         // expected responses
         responses: {
             // response code
             200: {
-                description: 'Todos were obtained', // response desc.
+                description: 'Todos were obtained',
                 content: {
                     // content-type
                     'application/json': {
