@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || ('localhost' as string);
 const SERVER_PORT = process.env.SERVER_PORT || (9000 as number);
-const MONGO_URL = 'mongodb://localhost:27017/retaurant_db';
+const MONGO_URL = 'mongodb://localhost:27017/test_db';
 const SERVER = {
     hostname: SERVER_HOSTNAME,
     port: SERVER_PORT

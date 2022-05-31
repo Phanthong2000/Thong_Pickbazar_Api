@@ -287,6 +287,11 @@
   "resolved" "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz"
   "version" "1.5.1"
 
+"bcryptjs@^2.4.3":
+  "integrity" "sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ=="
+  "resolved" "https://registry.npmjs.org/bcryptjs/-/bcryptjs-2.4.3.tgz"
+  "version" "2.4.3"
+
 "binary-extensions@^2.0.0":
   "integrity" "sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA=="
   "resolved" "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz"
@@ -412,7 +417,6 @@
   dependencies:
     "anymatch" "~3.1.2"
     "braces" "~3.0.2"
-    "fsevents" "~2.3.2"
     "glob-parent" "~5.1.2"
     "is-binary-path" "~2.1.0"
     "is-glob" "~4.0.1"
@@ -829,7 +833,6 @@
     "minimist" "^1.2.5"
     "neo-async" "^2.6.0"
     "source-map" "^0.6.1"
-    "uglify-js" "^3.1.4"
     "wordwrap" "^1.0.0"
   optionalDependencies:
     "uglify-js" "^3.1.4"
@@ -1174,7 +1177,6 @@
     "bson" "^4.6.2"
     "denque" "^2.0.1"
     "mongodb-connection-string-url" "^2.5.2"
-    "saslprep" "^1.0.3"
     "socks" "^2.6.2"
   optionalDependencies:
     "saslprep" "^1.0.3"
@@ -1844,7 +1846,6 @@
   "resolved" "https://registry.npmjs.org/z-schema/-/z-schema-4.2.4.tgz"
   "version" "4.2.4"
   dependencies:
-    "commander" "^2.7.1"
     "lodash.get" "^4.4.2"
     "lodash.isequal" "^4.5.0"
     "validator" "^13.6.0"

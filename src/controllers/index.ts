@@ -1,2 +1,2 @@
 export * from './userController';
-export * from './accountController'
+export * from './accountController';

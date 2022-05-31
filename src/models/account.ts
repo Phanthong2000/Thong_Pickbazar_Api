@@ -1,18 +1,19 @@
 import { AccountType } from './../interfaces';
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
-export interface AccountModel extends AccountType, Document { };
+export interface AccountModel extends AccountType, Document {}
 
 const AccountSchema = new Schema({
     username: { type: String, required: true },
-    password: { type: String, required: true }
-}, {
-    timestamps: true
+    password: { type: String, required: true },
+    createAt: { type: Number, required: true }
 });
 
 AccountSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
-    transform: function (doc, ret) { delete ret._id }
-})
+    transform: function (doc, ret) {
+        delete ret._id;
+    }
+});
 export default mongoose.model<AccountModel>('account', AccountSchema);
