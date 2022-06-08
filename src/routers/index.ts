@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import userRouter from './userRouter';
-import accountRouter from './accountRouter';
+import customerRouter from './customerRouter';
+import roleRouter from './roleRouter'
 
 const version = {
     v1: '/api/v1'
@@ -10,8 +10,8 @@ const useRoutes = (app: any) => {
         res.header('Access-Control-Allow-Origin', '*');
         next();
     });
-    app.use(`${version.v1}/users`, userRouter);
-    app.use(`${version.v1}/accounts`, accountRouter);
+    app.use(`${version.v1}/customers`, customerRouter);
+    app.use(`${version.v1}/roles`, roleRouter)
 };
 
 export = useRoutes;

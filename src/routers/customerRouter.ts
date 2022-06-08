@@ -8,6 +8,6 @@ router.post('/create', createUser);
 router.delete('/delete/:id', deleteUser);
 router.get('/detail/:id', findById);
 router.put('/update', updateUser);
-router.get('/usernameAndPassword', findUserByUsernameAndPassword);
+router.post('/login', findUserByUsernameAndPassword);
 
 export = router;
