@@ -38,3 +38,21 @@ export interface CategoryType {
     parentId: string;
     detail: string;
 }
+
+export interface TagType {
+    name: string;
+    icon: string;
+    slug: string;
+    detail: string;
+    groupId: string;
+}
+export interface AttributeValueType {
+    value: string;
+    meta: string
+}
+
+export interface AttributeType {
+    name_vi: string;
+    name_en: string;
+    values: Array<AttributeValueType>
+}
