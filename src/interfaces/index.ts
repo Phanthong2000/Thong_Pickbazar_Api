@@ -3,12 +3,12 @@ export interface UserType {
     age: string;
     username: string;
     password: string;
-    roleId: string
+    roleId: string;
 }
 
 export interface RoleType {
     name: string;
-    createAt: number
+    createAt: number;
 }
 
 export interface BannerGroupType {
@@ -16,7 +16,7 @@ export interface BannerGroupType {
     title_en: string;
     description_vn: string;
     description_en: string;
-    gallery: string
+    gallery: string;
 }
 export interface GroupType {
     name_vi: string;
@@ -25,5 +25,16 @@ export interface GroupType {
     layout: string;
     productCard: string;
     sliders: Array<string>;
-    banner: BannerGroupType
+    banner: BannerGroupType;
+}
+
+export interface CategoryType {
+    name_vi: string;
+    name_en: string;
+    icon: string;
+    image: string;
+    groupId: string;
+    type: string;
+    parentId: string;
+    detail: string;
 }
