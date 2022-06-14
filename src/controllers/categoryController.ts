@@ -71,6 +71,11 @@ const updateCategory = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
+const getAllCategoriesByGroup = (req: Request, res: Response, next: NextFunction) => {
+    const { groupId } = req.params;
+    return Category.find({ groupId }).then((categories) => res.status(200).json({ categories })).catch((error) => res.status(500).json({ error }))
+}
+
 const getAllCategoriesByGroupAndLangCode = (req: Request, res: Response, next: NextFunction) => {
     const { langcode } = req.headers;
     const { groupId } = req.params;
@@ -143,4 +148,4 @@ const getAllCategoriesByGroupAndLangCode = (req: Request, res: Response, next: N
         .catch((error) => res.status(500).json({ error }));
 };
 
-export { findAllCategories, createCategory, deleteCategory, findCategoryById, updateCategory, getAllCategoriesByGroupAndLangCode };
+export { findAllCategories, createCategory, deleteCategory, findCategoryById, updateCategory, getAllCategoriesByGroupAndLangCode, getAllCategoriesByGroup };

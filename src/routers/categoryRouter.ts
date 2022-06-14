@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCategory, deleteCategory, findAllCategories, findCategoryById, getAllCategoriesByGroupAndLangCode, updateCategory } from '../controllers';
+import { createCategory, deleteCategory, findAllCategories, findCategoryById, getAllCategoriesByGroup, getAllCategoriesByGroupAndLangCode, updateCategory } from '../controllers';
 
 const router = Router();
 
@@ -9,5 +9,6 @@ router.delete('/delete/:id', deleteCategory);
 router.get('/detail/:id', findCategoryById);
 router.put('/edit', updateCategory);
 router.get('/list/langcode/:groupId', getAllCategoriesByGroupAndLangCode);
+router.get('/detail/groupId/:groupId', getAllCategoriesByGroup)
 
 export default router;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Request, Response, NextFunction } from "express";
-import Tag from "../models/Tag";
+import Tag from "../models/tag";
 
 const findAllTags = (req: Request, res: Response, next: NextFunction) => {
     return Tag.aggregate([
