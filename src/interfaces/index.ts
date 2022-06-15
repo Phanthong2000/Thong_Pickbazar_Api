@@ -56,3 +56,19 @@ export interface AttributeType {
     name_en: string;
     values: Array<AttributeValueType>
 }
+
+export interface ProductType {
+    name_vi: string;
+    name_en: string;
+    unit: string;
+    description: string;
+    status: string;
+    featureImage: string;
+    galleries: Array<string>;
+    groupId: string;
+    categories: Array<string>;
+    tags: Array<string>;
+    type: string;
+    simple: any;
+    variable: any;
+}

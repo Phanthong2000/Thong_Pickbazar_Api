@@ -4,7 +4,8 @@ import roleRouter from './roleRouter';
 import groupRouter from './groupRouter';
 import categoryRouter from './categoryRouter';
 import tagRouter from './tagRouter';
-import attributeRouter from './attributeRouter'
+import attributeRouter from './attributeRouter';
+import productRouter from './productRouter'
 
 const version = {
     v1: '/api/v1'
@@ -19,7 +20,8 @@ const useRoutes = (app: any) => {
     app.use(`${version.v1}/groups`, groupRouter);
     app.use(`${version.v1}/categories`, categoryRouter);
     app.use(`${version.v1}/tags`, tagRouter);
-    app.use(`${version.v1}/attributes`, attributeRouter)
+    app.use(`${version.v1}/attributes`, attributeRouter);
+    app.use(`${version.v1}/products`, productRouter);
 };
 
 export = useRoutes;
