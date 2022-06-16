@@ -5,3 +5,4 @@ export * from './categoryController';
 export * from './tagController';
 export * from './attributeController';
 export * from './productController';
+export * from './userController'

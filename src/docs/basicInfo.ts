@@ -3,15 +3,14 @@ module.exports = {
     info: {
         version: '1.0.0',
         title: 'Chat API',
-        description: 'API Swagger Zalo',
+        description: 'API Swagger Thong App',
         license: {
             name: 'Terms of service',
             url: 'http://swagger.io/terms'
         },
         contact: {
-            name: 'App Chat',
-            email: 'info_iuh@student.iuh.edu.vn',
-            url: 'google.com'
+            name: 'Thong App',
+            email: 'phanthong2k000@gmail.com'
         }
     }
 };

@@ -161,4 +161,4 @@ const findUserByUsernameAndPassword = (req: Request, res: Response, next: NextFu
         })
         .catch((error) => res.status(error).json({ error }));
 };
-export { findById, createUser, findAllUser, deleteUser, updateUser, findUserByUsernameAndPassword };
+export { findById, createUser, deleteUser, updateUser, findUserByUsernameAndPassword };

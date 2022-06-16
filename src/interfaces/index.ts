@@ -72,3 +72,22 @@ export interface ProductType {
     simple: any;
     variable: any;
 }
+
+export interface AddressType {
+    street: string;
+    ward: string;
+    district: string;
+    city: string;
+}
+export interface UserType {
+    name: string;
+    email: string;
+    phone: string;
+    avatar: string;
+    status: string;
+    birthday: Date;
+    address: AddressType;
+    username: string;
+    password: string;
+    roleId: string;
+}
