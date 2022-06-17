@@ -2,7 +2,7 @@ module.exports = {
     openapi: '3.0.0',
     info: {
         version: '1.0.0',
-        title: 'Chat API',
+        title: 'Thong App API',
         description: 'API Swagger Thong App',
         license: {
             name: 'Terms of service',

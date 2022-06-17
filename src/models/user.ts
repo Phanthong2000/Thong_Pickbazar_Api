@@ -8,12 +8,13 @@ const UserSchema = new Schema({
     email: { type: String, required: true },
     phone: { type: String, required: true },
     avatar: { type: String, required: true },
-    birthday: { type: Date, required: true },
+    birthday: { type: Date, required: false },
     status: { type: String, required: true },
     address: { type: Array, required: true },
     username: { type: String, required: true },
     password: { type: String, required: true },
     roleId: { type: String, required: true },
+    refreshToken: { type: String, required: false }
 }, {
     timestamps: true,
     collection: 'users'

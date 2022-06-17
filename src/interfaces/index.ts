@@ -90,4 +90,5 @@ export interface UserType {
     username: string;
     password: string;
     roleId: string;
+    refreshToken: string;
 }
