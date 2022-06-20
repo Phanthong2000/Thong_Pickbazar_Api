@@ -8,6 +8,7 @@ import attributeRouter from './attributeRouter';
 import productRouter from './productRouter';
 import userRouter from './userRouter';
 import authRouter from './authRouter';
+import orderStatusRouter from './orderStatusRouter'
 
 const version = {
     v1: '/api/v1'
@@ -26,6 +27,7 @@ const useRoutes = (app: any) => {
     app.use(`${version.v1}/products`, productRouter);
     app.use(`${version.v1}/users`, userRouter);
     app.use(`${version.v1}/auth`, authRouter);
+    app.use(`${version.v1}/order-statuses`, orderStatusRouter)
 };
 
 export = useRoutes;

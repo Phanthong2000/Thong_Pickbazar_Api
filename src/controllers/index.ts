@@ -6,4 +6,5 @@ export * from './tagController';
 export * from './attributeController';
 export * from './productController';
 export * from './userController';
-export * from './authController'
+export * from './authController';
+export * from './orderStatusController'

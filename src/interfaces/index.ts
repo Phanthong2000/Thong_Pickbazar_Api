@@ -92,3 +92,9 @@ export interface UserType {
     roleId: string;
     refreshToken: string;
 }
+
+export interface OrderStatusType {
+    name: string;
+    serial: number;
+    color: string;
+}

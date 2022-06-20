@@ -49,7 +49,7 @@ const createUserCustomer = (req: Request, res: Response, next: NextFunction) => 
             });
             return user
                 .save()
-                .then((user) => res.status(200).json({ user }))
+                .then((user) => res.status(200).json({ user: user, role: role }))
                 .catch((error) => res.status(500).json({ error }));
         })
         .catch((error) => res.status(500).json({ error }));
