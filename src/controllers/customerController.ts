@@ -14,7 +14,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     //     .save()
     //     .then((user) => res.status(200).json({ user }))
     //     .catch((error) => res.status(500).json({ error }));
-    const roleName = "CUSTOMER";
+    const roleName = 'CUSTOMER';
     const role = await Role.aggregate([
         {
             $match: {
@@ -26,7 +26,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         _id: new mongoose.Types.ObjectId(),
         ...req.body,
         roleId: role[0]._id
-    })
+    });
     return customer
         .save()
         .then((customer) => res.status(200).json({ customer }))
@@ -60,7 +60,6 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 //         .catch((error) => res.status(500).json({ error }));
 // };
 
-
 // db.users.aggregate([{ $addFields: { accountObjectId: { $toObjectId: "$accountId" } } }, { $lookup: { from: "accounts", localField: "accountObjectId", foreignField: "_id", as: "account" } }, { $unwind: "$account" }, { $addFields: { "account.roleObjectId": { $toObjectId: "$account.roleId" } } }, { $lookup: { from: "roles", localField: "account.roleObjectId", foreignField: "_id", as: "account.role" } }, { $unwind: "$account.role" }])
 const findAllUser = (req: Request, res: Response, next: NextFunction) => {
     bcrypt.genSalt(10, (err: any, salt: any) => {
@@ -75,7 +74,7 @@ const findAllUser = (req: Request, res: Response, next: NextFunction) => {
         {
             $addFields: {
                 roleObjectId: { $toObjectId: '$roleId' },
-                id: "$_id"
+                id: '$_id'
             }
         },
         {
@@ -91,7 +90,7 @@ const findAllUser = (req: Request, res: Response, next: NextFunction) => {
         },
         {
             $addFields: {
-                "role.id": "$roleId"
+                'role.id': '$roleId'
             }
         },
         {
@@ -99,7 +98,7 @@ const findAllUser = (req: Request, res: Response, next: NextFunction) => {
                 roleId: 0,
                 roleObjectId: 0,
                 _id: 0,
-                "role._id": 0
+                'role._id': 0
             }
         }
     ])
@@ -131,24 +130,23 @@ const findUserByUsernameAndPassword = (req: Request, res: Response, next: NextFu
     const { username, password } = req.body;
     return Customer.aggregate([
         {
-            $match:
-                { username, password }
+            $match: { username, password }
         },
-        {
-            $addFields:
-            {
-                roleObjectId: { $toObjectId: "$roleId" },
-                id: "$_id"
-            }
-        },
-        { $lookup: { from: "roles", localField: "roleObjectId", foreignField: "_id", as: "role" } },
-        { $unwind: "$role" },
         {
             $addFields: {
-                "role.id": "$roleId"
+                roleObjectId: { $toObjectId: '$roleId' },
+                id: '$_id'
             }
         },
-        { $project: { roleObjectId: 0, roleId: 0, _id: 0, "role._id": 0 } }])
+        { $lookup: { from: 'roles', localField: 'roleObjectId', foreignField: '_id', as: 'role' } },
+        { $unwind: '$role' },
+        {
+            $addFields: {
+                'role.id': '$roleId'
+            }
+        },
+        { $project: { roleObjectId: 0, roleId: 0, _id: 0, 'role._id': 0 } }
+    ])
         .then(async (customers) => {
             const token = await generateToken(customers.at(0), process.env.TOKEN_SECRET_KEY, process.env.ACCESS_TOKEN_LIFE);
             console.log(token);
@@ -157,8 +155,7 @@ const findUserByUsernameAndPassword = (req: Request, res: Response, next: NextFu
                     ...customers.at(0),
                     accessToken: token
                 }
-            })
+            });
         })
         .catch((error) => res.status(error).json({ error }));
 };
-export { findById, createUser, deleteUser, updateUser, findUserByUsernameAndPassword };

@@ -1,13 +1,13 @@
-import { Router } from 'express';
-import { createUser, deleteUser, findById, findUserByUsernameAndPassword, updateUser } from '../controllers';
+// import { Router } from 'express';
+// import { createUser, deleteUser, findById, findUserByUsernameAndPassword, updateUser } from '../controllers';
 
-const router = Router();
+// const router = Router();
 
-// router.get('/list', findAllUser);
-router.post('/create', createUser);
-router.delete('/delete/:id', deleteUser);
-router.get('/detail/:id', findById);
-router.put('/update', updateUser);
-router.post('/login', findUserByUsernameAndPassword);
+// // router.get('/list', findAllUser);
+// router.post('/create', createUser);
+// router.delete('/delete/:id', deleteUser);
+// router.get('/detail/:id', findById);
+// router.put('/update', updateUser);
+// router.post('/login', findUserByUsernameAndPassword);
 
-export = router;
+// export = router;
