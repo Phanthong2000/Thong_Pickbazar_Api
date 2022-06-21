@@ -9,4 +9,5 @@ export * from './userController';
 export * from './authController';
 export * from './orderStatusController';
 export * from './couponController';
-export * from './taxController'
+export * from './taxController';
+export * from './shippingController';

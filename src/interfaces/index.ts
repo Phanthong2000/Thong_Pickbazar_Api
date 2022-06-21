@@ -48,13 +48,13 @@ export interface TagType {
 }
 export interface AttributeValueType {
     value: string;
-    meta: string
+    meta: string;
 }
 
 export interface AttributeType {
     name_vi: string;
     name_en: string;
-    values: Array<AttributeValueType>
+    values: Array<AttributeValueType>;
 }
 
 export interface ProductType {
@@ -106,7 +106,7 @@ export interface CouponType {
     type: string;
     amount: number;
     from: Date;
-    to: Date
+    to: Date;
 }
 
 export interface TaxType {
@@ -117,4 +117,9 @@ export interface TaxType {
     city: string;
     district: string;
     ward: string;
+}
+
+export interface ShippingType {
+    name: string;
+    fee: number;
 }
