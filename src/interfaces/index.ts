@@ -98,3 +98,23 @@ export interface OrderStatusType {
     serial: number;
     color: string;
 }
+
+export interface CouponType {
+    image: string;
+    code: string;
+    description: string;
+    type: string;
+    amount: number;
+    from: Date;
+    to: Date
+}
+
+export interface TaxType {
+    name: string;
+    type: string;
+    rate: number;
+    status: string;
+    city: string;
+    district: string;
+    ward: string;
+}

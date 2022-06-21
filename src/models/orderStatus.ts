@@ -20,4 +20,4 @@ OrderStatusSchema.set('toJSON', {
     }
 });
 
-export default mongoose.model<OrderStatusModel>('orderStatuses', OrderStatusSchema)
+export default mongoose.model<OrderStatusModel>('orderStatus', OrderStatusSchema)
