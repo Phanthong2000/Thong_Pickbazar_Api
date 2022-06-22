@@ -10,7 +10,10 @@ const CouponSchema = new Schema({
     type: { type: String, required: true },
     amount: { type: Number, required: true },
     from: { type: Date, required: true },
-    to: { type: Date, required: true }
+    to: { type: Date, required: true },
+    condition: { type: String, required: true },
+    paymentMethodId: { type: String, required: false },
+    minTotal: { type: Number, required: false }
 }, {
     timestamps: true,
     collection: 'coupons'

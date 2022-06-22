@@ -11,3 +11,4 @@ export * from './orderStatusController';
 export * from './couponController';
 export * from './taxController';
 export * from './shippingController';
+export * from './paymentMethodController'

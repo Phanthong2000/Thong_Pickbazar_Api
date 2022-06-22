@@ -107,6 +107,9 @@ export interface CouponType {
     amount: number;
     from: Date;
     to: Date;
+    condition: string;
+    paymentMethodId: string;
+    minTotal: number;
 }
 
 export interface TaxType {
@@ -122,4 +125,12 @@ export interface TaxType {
 export interface ShippingType {
     name: string;
     fee: number;
+}
+
+export interface PaymentMethodType {
+    name: string;
+    image: string;
+    type: string;
+    status: string;
+    parentId: string;
 }
