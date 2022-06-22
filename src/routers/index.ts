@@ -12,7 +12,8 @@ import orderStatusRouter from './orderStatusRouter';
 import couponRouter from './couponRouter';
 import taxRouter from './taxRouter';
 import shippingRouter from './shippingRouter';
-import paymentMethodRouter from './paymentMethodRouter'
+import paymentMethodRouter from './paymentMethodRouter';
+import settingRouter from './settingRouter';
 
 const version = {
     v1: '/api/v1'
@@ -35,7 +36,8 @@ const useRoutes = (app: any) => {
     app.use(`${version.v1}/coupons`, couponRouter);
     app.use(`${version.v1}/taxes`, taxRouter);
     app.use(`${version.v1}/shippings`, shippingRouter);
-    app.use(`${version.v1}/payment-methods`, paymentMethodRouter)
+    app.use(`${version.v1}/payment-methods`, paymentMethodRouter);
+    app.use(`${version.v1}/setting`, settingRouter);
 };
 
 export = useRoutes;
