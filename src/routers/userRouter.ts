@@ -1,6 +1,6 @@
 import { authorize } from './../middleware/authMiddleware';
 import { Router } from 'express';
-import { updateStatusUser, createUserCustomer, deleteUser, findAllUsers, updateUser, findUserById } from '../controllers';
+import { updateStatusUser, createUserCustomer, deleteUser, findAllUsers, updateUser, findUserById, getAllCustomerByStatus } from '../controllers';
 
 const router = Router();
 
@@ -10,5 +10,6 @@ router.put('/edit', authorize(['ADMIN']), updateUser);
 router.post('/create/customer', authorize(['ADMIN']), createUserCustomer);
 router.put('/edit/:id', authorize(['ADMIN']), updateStatusUser);
 router.get('/detail/:id', findUserById);
+router.get('/list/customer/:status', getAllCustomerByStatus);
 
 export default router;

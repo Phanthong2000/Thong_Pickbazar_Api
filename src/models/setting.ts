@@ -17,7 +17,10 @@ const SettingSchema = new Schema(
             metaTags: { type: String, required: true },
             canonicalUrl: { type: String, required: true },
             ogTitle: { type: String, required: true },
-            ogDescription: { type: String, required: true }
+            ogDescription: { type: String, required: true },
+            ogImage: { type: String, required: true },
+            twitterHandle: { type: String, required: true },
+            twitterCardType: { type: String, required: true }
         },
         deliverySchedule: [
             {
@@ -26,13 +29,9 @@ const SettingSchema = new Schema(
             }
         ],
         shop: {
-            address: {
-                city: { type: String, required: true },
-                district: { type: String, required: true },
-                ward: { type: String, required: true },
-                street: { type: String, required: true }
-            },
+            address: { type: String, required: true },
             phone: { type: String, required: true },
+            website: { type: String, required: true },
             social: [
                 {
                     icon: { type: String, required: true },

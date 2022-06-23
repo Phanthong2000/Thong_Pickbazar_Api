@@ -149,6 +149,9 @@ export interface SettingType {
         canonicalUrl: string;
         ogTitle: string;
         ogDescription: string;
+        ogImage: string;
+        twitterHandle: string;
+        twitterCardType: string;
     };
     deliverySchedule: [
         {
@@ -157,13 +160,9 @@ export interface SettingType {
         }
     ];
     shop: {
-        address: {
-            city: string;
-            district: string;
-            ward: string;
-            street: string;
-        };
+        address: string;
         phone: string;
+        website: string;
         social: [
             {
                 icon: string;
@@ -172,4 +171,29 @@ export interface SettingType {
             }
         ];
     };
+}
+
+export interface OrderType {
+    customerId: string;
+    phone: string;
+    billAddress: string;
+    shippingAddress: string;
+    deliverySchedule: {
+        title: string;
+        description: string;
+    };
+    products: [
+        {
+            productId: string;
+            price: number;
+            quantity: number;
+        }
+    ];
+    taxId: string;
+    shippingId: string;
+    couponId: string;
+    orderStatusId: string;
+    paymentMethodId: string;
+    internetBankingImage: string;
+    total: number;
 }

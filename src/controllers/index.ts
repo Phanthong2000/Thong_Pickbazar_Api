@@ -13,3 +13,4 @@ export * from './taxController';
 export * from './shippingController';
 export * from './paymentMethodController';
 export * from './settingController';
+export * from './orderController';

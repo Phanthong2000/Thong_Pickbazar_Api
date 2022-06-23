@@ -105,4 +105,35 @@ const findUserById = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-export { findAllUsers, deleteUser, updateUser, createUserCustomer, updateStatusUser, findUserById };
+const getAllCustomerByStatus = (req: Request, res: Response, next: NextFunction) => {
+    const { status } = req.params;
+    return User.aggregate([
+        {
+            $addFields: {
+                roleObjectId: { $toObjectId: '$roleId' },
+                id: { $toString: '$_id' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'roles',
+                localField: 'roleObjectId',
+                foreignField: '_id',
+                as: 'role'
+            }
+        },
+        {
+            $unwind: '$role'
+        },
+        {
+            $match: {
+                'role.name': 'CUSTOMER',
+                status
+            }
+        }
+    ])
+        .then((users) => res.status(200).json({ users }))
+        .catch((error) => res.status(500).json({ error }));
+};
+
+export { findAllUsers, deleteUser, updateUser, createUserCustomer, updateStatusUser, findUserById, getAllCustomerByStatus };
