@@ -142,6 +142,7 @@ export interface SettingType {
     currency: string;
     minimumOrderAmount: number;
     optCheckout: boolean;
+    shippingId: string;
     seo: {
         metaTitle: string;
         metaDescription: string;
@@ -187,6 +188,7 @@ export interface OrderType {
             productId: string;
             price: number;
             quantity: number;
+            unit: string
         }
     ];
     taxId: string;

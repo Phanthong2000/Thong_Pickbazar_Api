@@ -39,6 +39,9 @@ const updateStatus = (req: Request, res: Response, next: NextFunction) => {
     const { status } = req.body;
     return Tax.updateOne({ _id: id }, { status }, { returnOriginal: false }).then((tax) => res.status(200).json({ tax })).catch((error) => res.status(500).json({ error }))
 }
+const getTaxForOrder = (req: Request, res: Response, next: NextFunction) => {
+    return Tax.findOne({ status: 'active' }).then((tax) => res.status(200).json({ tax })).catch((error) => res.status(500).json({ error }))
+}
 
 export {
     findAllTaxes,
@@ -47,5 +50,6 @@ export {
     findTaxById,
     updateTax,
     getTaxByName,
-    updateStatus
+    updateStatus,
+    getTaxForOrder
 }

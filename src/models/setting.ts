@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { SettingType } from '../interfaces';
 
-export interface SettingModel extends SettingType, Document {}
+export interface SettingModel extends SettingType, Document { }
 
 const SettingSchema = new Schema(
     {
@@ -11,6 +11,7 @@ const SettingSchema = new Schema(
         currency: { type: String, required: true },
         minimumOrderAmount: { type: Number, required: true },
         otpCheckOut: { type: Boolean, required: true },
+        shippingId: { type: String, required: true },
         seo: {
             metaTitle: { type: String, required: true },
             metaDescription: { type: String, required: true },
