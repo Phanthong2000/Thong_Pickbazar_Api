@@ -34,11 +34,31 @@ const getCouponByCode = (req: Request, res: Response, next: NextFunction) => {
     return Coupon.findOne({ code: code }).then((coupon) => res.status(200).json({ coupon })).catch((error) => res.status(500).json({ error }))
 }
 
+const getCouponsActive = (req: Request, res: Response, next: NextFunction) => {
+    const toDay = new Date().getTime();
+    return Coupon.aggregate([
+        {
+            $addFields: {
+                fromInt: { $toLong: "$from" },
+                toInt: { $toLong: "$to" },
+                id: { $toString: "$_id" }
+            }
+        },
+        {
+            $match: {
+                fromInt: { $lte: toDay },
+                toInt: { $gte: toDay }
+            }
+        }
+    ]).then((coupons) => res.status(200).json({ coupons })).catch((error) => res.status(500).json({ error }))
+}
+
 export {
     findAllCoupons,
     createCoupon,
     deleteCoupon,
     findCouponById,
     updateCoupon,
-    getCouponByCode
+    getCouponByCode,
+    getCouponsActive
 }

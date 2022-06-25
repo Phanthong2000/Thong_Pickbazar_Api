@@ -3,8 +3,32 @@ import mongoose from 'mongoose';
 import Setting from '../models/setting';
 
 const getSetting = (req: Request, res: Response, next: NextFunction) => {
-    return Setting.findById('00000001f81c868d2901954f')
-        .then((setting) => res.status(200).json({ setting }))
+    return Setting.
+        aggregate([
+            {
+                $addFields: {
+                    id: { $toString: "$_id" },
+                    shippingObjectId: { $toObjectId: "$shippingId" }
+                }
+            },
+            {
+                $match: {
+                    id: "00000001f81c868d2901954f"
+                }
+            },
+            {
+                $lookup: {
+                    from: "shippings",
+                    localField: "shippingObjectId",
+                    foreignField: "_id",
+                    as: "shipping"
+                }
+            },
+            {
+                $unwind: "$shipping"
+            }
+        ])
+        .then((settings) => res.status(200).json({ setting: settings[0] }))
         .catch((error) => res.status(500).json({ error }));
 };
 
