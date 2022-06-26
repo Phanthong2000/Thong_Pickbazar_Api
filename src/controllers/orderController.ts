@@ -3,7 +3,22 @@ import mongoose from 'mongoose';
 import Order from '../models/order';
 
 const findAllOrders = (req: Request, res: Response, next: NextFunction) => {
-    return Order.find()
+    return Order.aggregate([
+        {
+            $addFields: {
+                id: { $toString: '$_id' },
+                customerObjectId: { $toObjectId: '$customerId' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'customerObjectId',
+                foreignField: '_id',
+                as: 'customer'
+            }
+        }
+    ])
         .then((orders) => res.status(200).json({ orders }))
         .catch((error) => res.status(500).json({ error }));
 };

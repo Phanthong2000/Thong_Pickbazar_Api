@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { OrderType } from '../interfaces';
 
-export interface OrderModel extends OrderType, Document { }
+export interface OrderModel extends OrderType, Document {}
 
 const OrderSchema = new Schema(
     {
@@ -21,10 +21,20 @@ const OrderSchema = new Schema(
                 unit: { type: String, required: true }
             }
         ],
-        taxId: { type: String, required: true },
-        shippingId: { type: String, required: true },
-        couponId: { type: String, required: true },
-        orderStatusId: { type: String, required: true },
+        tax: {
+            taxId: { type: String, required: true },
+            rate: { type: Number, required: true }
+        },
+        shipping: {
+            shippingId: { type: String, required: true },
+            fee: { type: Number, required: true }
+        },
+        coupon: {
+            couponId: { type: String, required: false },
+            type: { type: String, required: false },
+            amount: { type: Number, required: false }
+        },
+        orderStatus: { type: Number, required: true },
         paymentMethodId: { type: String, required: true },
         internetBankingImage: { type: String, required: false },
         total: { type: Number, required: true }

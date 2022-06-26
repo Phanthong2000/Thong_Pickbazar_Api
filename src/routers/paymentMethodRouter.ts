@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createPaymentMethod, deletePaymentMethod, findAllPaymentMethod, findPaymentMethodById, updatePaymentMethod, updateStatusPaymentMethod } from '../controllers';
+import { createPaymentMethod, deletePaymentMethod, findAllPaymentMethod, findPaymentMethodById, getAllPaymentMethodsActive, updatePaymentMethod, updateStatusPaymentMethod } from '../controllers';
 
 const router = Router();
 
@@ -9,5 +9,6 @@ router.put('/edit/:id', updateStatusPaymentMethod);
 router.put('/edit', updatePaymentMethod);
 router.delete('/delete/:id', deletePaymentMethod);
 router.get('/detail/:id', findPaymentMethodById);
+router.get('/list/active', getAllPaymentMethodsActive);
 
 export default router;
