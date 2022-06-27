@@ -107,14 +107,26 @@ const getOrderById = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const createOrder = (req: Request, res: Response, next: NextFunction) => {
-    const order = new Order({
-        _id: new mongoose.Types.ObjectId(),
-        ...req.body
+    const { order, products } = req.body;
+    let count = 0;
+    products.forEach(async (product: any) => {
+        let result = null;
+        if (product.type === 'simple') result = await Product.updateOne({ _id: product.id }, { 'simple.quantity': product.quantity }, { returnOriginal: false });
+        else result = await Product.updateOne({ _id: product.id }, { 'variable.quantity': product.quantity }, { returnOriginal: false });
+        if (result) {
+            count++;
+            if (count === products.length) {
+                const newOrder = new Order({
+                    _id: new mongoose.Types.ObjectId(),
+                    ...order
+                });
+                return newOrder
+                    .save()
+                    .then((order) => res.status(200).json({ order }))
+                    .catch((error) => res.status(500).json({ error }));
+            }
+        }
     });
-    return order
-        .save()
-        .then((order) => res.status(200).json({ order }))
-        .catch((error) => res.status(500).json({ error }));
 };
 
 const updateOrder = (req: Request, res: Response, next: NextFunction) => {
@@ -133,15 +145,13 @@ const deleteOrder = (req: Request, res: Response, next: NextFunction) => {
 
 const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const startToday = Date.parse(
-            moment(new Date().getTime()).format(`YYYY/MM/DD`)
-        );
+        const startToday = Date.parse(moment(new Date().getTime()).format(`YYYY/MM/DD`));
         const endToday = startToday + 86400000;
         const last30Day = startToday - 2592000000;
         const todayRevenue = await Order.aggregate([
             {
                 $addFields: {
-                    orderDate: { $toLong: "$createdAt" }
+                    orderDate: { $toLong: '$createdAt' }
                 }
             },
             {
@@ -150,7 +160,7 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                         {
                             orderDate: {
                                 $gte: startToday
-                            },
+                            }
                         },
                         {
                             orderDate: {
@@ -163,14 +173,14 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
             {
                 $group: {
                     _id: null,
-                    total: { $sum: "$total" }
+                    total: { $sum: '$total' }
                 }
             }
         ]);
         const orders30Day = await Order.aggregate([
             {
                 $addFields: {
-                    orderDate: { $toLong: "$createdAt" }
+                    orderDate: { $toLong: '$createdAt' }
                 }
             },
             {
@@ -179,7 +189,7 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                         {
                             orderDate: {
                                 $gte: last30Day
-                            },
+                            }
                         },
                         {
                             orderDate: {
@@ -195,11 +205,11 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                     total: { $sum: 1 }
                 }
             }
-        ])
+        ]);
         const revenue30Day = await Order.aggregate([
             {
                 $addFields: {
-                    orderDate: { $toLong: "$createdAt" }
+                    orderDate: { $toLong: '$createdAt' }
                 }
             },
             {
@@ -208,7 +218,7 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                         {
                             orderDate: {
                                 $gte: last30Day
-                            },
+                            }
                         },
                         {
                             orderDate: {
@@ -221,7 +231,7 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
             {
                 $group: {
                     _id: null,
-                    total: { $sum: "$total" }
+                    total: { $sum: '$total' }
                 }
             }
         ]);
@@ -246,13 +256,7 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
             },
             {
                 $match: {
-                    'role.name': 'CUSTOMER',
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    total: { $sum: 1 }
+                    'role.name': 'CUSTOMER'
                 }
             }
         ]);
@@ -285,7 +289,7 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
         const saleHistory = await Order.aggregate([
             {
                 $addFields: {
-                    orderDate: { $toLong: "$createdAt" },
+                    orderDate: { $toLong: '$createdAt' }
                 }
             },
             {
@@ -297,10 +301,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start1]
+                                                $gte: ['$orderDate', start1]
                                             },
                                             {
-                                                $lte: ["$orderDate", end1]
+                                                $lte: ['$orderDate', end1]
                                             }
                                         ]
                                     },
@@ -310,10 +314,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start2]
+                                                $gte: ['$orderDate', start2]
                                             },
                                             {
-                                                $lte: ["$orderDate", end2]
+                                                $lte: ['$orderDate', end2]
                                             }
                                         ]
                                     },
@@ -323,10 +327,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start3]
+                                                $gte: ['$orderDate', start3]
                                             },
                                             {
-                                                $lte: ["$orderDate", end3]
+                                                $lte: ['$orderDate', end3]
                                             }
                                         ]
                                     },
@@ -336,10 +340,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start4]
+                                                $gte: ['$orderDate', start4]
                                             },
                                             {
-                                                $lte: ["$orderDate", end4]
+                                                $lte: ['$orderDate', end4]
                                             }
                                         ]
                                     },
@@ -349,10 +353,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start5]
+                                                $gte: ['$orderDate', start5]
                                             },
                                             {
-                                                $lte: ["$orderDate", end5]
+                                                $lte: ['$orderDate', end5]
                                             }
                                         ]
                                     },
@@ -362,10 +366,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start6]
+                                                $gte: ['$orderDate', start6]
                                             },
                                             {
-                                                $lte: ["$orderDate", end6]
+                                                $lte: ['$orderDate', end6]
                                             }
                                         ]
                                     },
@@ -375,10 +379,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start7]
+                                                $gte: ['$orderDate', start7]
                                             },
                                             {
-                                                $lte: ["$orderDate", end7]
+                                                $lte: ['$orderDate', end7]
                                             }
                                         ]
                                     },
@@ -388,10 +392,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start8]
+                                                $gte: ['$orderDate', start8]
                                             },
                                             {
-                                                $lte: ["$orderDate", end8]
+                                                $lte: ['$orderDate', end8]
                                             }
                                         ]
                                     },
@@ -401,10 +405,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start9]
+                                                $gte: ['$orderDate', start9]
                                             },
                                             {
-                                                $lte: ["$orderDate", end9]
+                                                $lte: ['$orderDate', end9]
                                             }
                                         ]
                                     },
@@ -414,10 +418,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start10]
+                                                $gte: ['$orderDate', start10]
                                             },
                                             {
-                                                $lte: ["$orderDate", end10]
+                                                $lte: ['$orderDate', end10]
                                             }
                                         ]
                                     },
@@ -427,10 +431,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start11]
+                                                $gte: ['$orderDate', start11]
                                             },
                                             {
-                                                $lte: ["$orderDate", end11]
+                                                $lte: ['$orderDate', end11]
                                             }
                                         ]
                                     },
@@ -440,10 +444,10 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
                                     case: {
                                         $and: [
                                             {
-                                                $gte: ["$orderDate", start12]
+                                                $gte: ['$orderDate', start12]
                                             },
                                             {
-                                                $lte: ["$orderDate", end12]
+                                                $lte: ['$orderDate', end12]
                                             }
                                         ]
                                     },
@@ -457,9 +461,9 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
             },
             {
                 $group: {
-                    _id: "$month",
+                    _id: '$month',
                     order: { $sum: 1 },
-                    revenue: { $sum: "$total" }
+                    revenue: { $sum: '$total' }
                 }
             },
             {
@@ -475,33 +479,192 @@ const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunct
             saleHistory.forEach((item) => {
                 if (item._id === i) {
                     saleHistoryOrder.push(item.order);
-                    saleHistoryRevenue.push(item.revenue)
-                    flag = true
+                    saleHistoryRevenue.push(item.revenue);
+                    flag = true;
                 }
-            })
+            });
             if (!flag) {
                 saleHistoryOrder.push(0);
-                saleHistoryRevenue.push(0)
+                saleHistoryRevenue.push(0);
             }
         }
-        console.log(saleHistoryOrder, saleHistoryRevenue)
+        const recentOrders = await Order.aggregate([
+            {
+                $addFields: {
+                    id: { $toString: '$_id' },
+                    customerObjectId: { $toObjectId: '$customerId' },
+                    orderDate: { $toLong: '$createdAt' }
+                }
+            },
+            {
+                $sort: {
+                    orderDate: -1
+                }
+            },
+            {
+                $limit: 10
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'customerObjectId',
+                    foreignField: '_id',
+                    as: 'customer'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'orderStatuses',
+                    localField: 'orderStatus',
+                    foreignField: 'serial',
+                    as: 'orderStatusOrder'
+                }
+            },
+            {
+                $unwind: '$customer'
+            },
+            {
+                $unwind: '$orderStatusOrder'
+            }
+        ]);
+        const top10Customers = await Order.aggregate([
+            {
+                $addFields: {
+                    id: { $toString: '$_id' },
+                    customerObjectId: { $toObjectId: '$customerId' }
+                }
+            },
+            {
+                $group: {
+                    _id: '$customerObjectId',
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'customer'
+                }
+            },
+            {
+                $unwind: '$customer'
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            },
+            {
+                $limit: 10
+            }
+        ]);
+        const popularProducts = await Order.aggregate([
+            {
+                $addFields: {
+                    id: { $toString: '$_id' },
+                    customerObjectId: { $toObjectId: '$customerId' }
+                }
+            },
+            {
+                $unwind: '$products'
+            },
+            {
+                $group: {
+                    _id: '$products.productId',
+                    count: { $sum: '$products.quantity' }
+                }
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            },
+            {
+                $limit: 10
+            },
+            {
+                $addFields: {
+                    productObjectId: {
+                        $toObjectId: '$_id'
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'productObjectId',
+                    foreignField: '_id',
+                    as: 'product'
+                }
+            },
+            {
+                $unwind: '$product'
+            },
+            {
+                $addFields: {
+                    'product.groupObjectId': { $toObjectId: '$product.groupId' }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'groups',
+                    localField: 'product.groupObjectId',
+                    foreignField: '_id',
+                    as: 'product.group'
+                }
+            },
+            {
+                $unwind: '$product.group'
+            }
+        ]);
         return res.status(200).json({
             dashboard: {
-                todayRevenue: todayRevenue[0].total,
-                orders30Day: orders30Day[0].total,
-                revenue30Day: revenue30Day[0].total,
-                totalUser: totalUser[0].total,
+                todayRevenue: todayRevenue[0] ? todayRevenue[0].total : 0,
+                orders30Day: orders30Day[0] ? orders30Day[0].total : 0,
+                revenue30Day: revenue30Day[0] ? revenue30Day[0].total : 0,
+                totalUser: totalUser.length,
                 saleHistory: {
                     orders: saleHistoryOrder,
                     revenue: saleHistoryRevenue
-                }
+                },
+                recentOrders,
+                top10Customers,
+                popularProducts
             }
-        })
+        });
     } catch (error) {
-        return res.status(500).json({ error })
+        console.log(error);
+        return res.status(500).json({ error });
     }
+};
 
-}
-
-
-export { findAllOrders, createOrder, updateOrder, deleteOrder, getOrderById, getAnalyticDashboard };
+const topCustomer = (req: Request, res: Response, next: NextFunction) => {
+    return User.aggregate([
+        {
+            $addFields: {
+                roleObjectId: { $toObjectId: '$roleId' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'roles',
+                localField: 'roleObjectId',
+                foreignField: '_id',
+                as: 'role'
+            }
+        },
+        {
+            $unwind: '$role'
+        },
+        {
+            $match: {
+                'role.name': 'CUSTOMER'
+            }
+        }
+    ])
+        .then((orders) => res.status(200).json({ orders }))
+        .catch((error) => res.status(500).json({ error }));
+};
+export { findAllOrders, createOrder, updateOrder, deleteOrder, getOrderById, getAnalyticDashboard, topCustomer };
