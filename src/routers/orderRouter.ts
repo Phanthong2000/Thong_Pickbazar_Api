@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createOrder, deleteOrder, findAllOrders, getOrderById, updateOrder } from '../controllers';
+import { createOrder, deleteOrder, findAllOrders, getAnalyticDashboard, getOrderById, updateOrder } from '../controllers';
 
 const router = Router();
 
@@ -8,5 +8,6 @@ router.post('/create', createOrder);
 router.put('/edit', updateOrder);
 router.delete('/delete/:id', deleteOrder);
 router.get('/detail/:id', getOrderById);
+router.get('/dashboard', getAnalyticDashboard)
 
 export default router;
