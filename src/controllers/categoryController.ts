@@ -73,12 +73,13 @@ const updateCategory = (req: Request, res: Response, next: NextFunction) => {
 
 const getAllCategoriesByGroup = (req: Request, res: Response, next: NextFunction) => {
     const { groupId } = req.params;
-    return Category.find({ groupId }).then((categories) => res.status(200).json({ categories })).catch((error) => res.status(500).json({ error }))
-}
+    return Category.find({ groupId })
+        .then((categories) => res.status(200).json({ categories }))
+        .catch((error) => res.status(500).json({ error }));
+};
 
 const getAllCategoriesByGroupAndLangCode = (req: Request, res: Response, next: NextFunction) => {
-    const langcode = req.headers["langcode"];
-    console.log('langcoode', langcode)
+    const langcode = req.headers['langcode'];
     const { groupId } = req.params;
     return Category.aggregate([
         {
