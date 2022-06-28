@@ -77,7 +77,8 @@ const getAllCategoriesByGroup = (req: Request, res: Response, next: NextFunction
 }
 
 const getAllCategoriesByGroupAndLangCode = (req: Request, res: Response, next: NextFunction) => {
-    const { langcode } = req.headers;
+    const langcode = req.headers["langcode"];
+    console.log('langcoode', langcode)
     const { groupId } = req.params;
     return Category.aggregate([
         {

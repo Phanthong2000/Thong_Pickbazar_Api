@@ -209,3 +209,13 @@ export interface OrderType {
     internetBankingImage: string;
     total: number;
 }
+
+
+export interface NotificationType {
+    content: string;
+    type: string;
+    isRead: boolean;
+    senderId: string;
+    messageId: string;
+    orderId: string;
+}

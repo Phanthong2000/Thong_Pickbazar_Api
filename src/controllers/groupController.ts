@@ -53,7 +53,7 @@ const getGroupByName = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAllGroupsByLangCode = (req: Request, res: Response, next: NextFunction) => {
-    const { langcode } = req.headers;
+    const langcode = req.headers["langcode"];
     return Group.aggregate([
         {
             $project: {

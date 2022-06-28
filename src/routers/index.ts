@@ -15,6 +15,7 @@ import shippingRouter from './shippingRouter';
 import paymentMethodRouter from './paymentMethodRouter';
 import settingRouter from './settingRouter';
 import orderRouter from './orderRouter';
+import notificationRouter from './notificationRouter'
 
 const version = {
     v1: '/api/v1'
@@ -40,6 +41,7 @@ const useRoutes = (app: any) => {
     app.use(`${version.v1}/payment-methods`, paymentMethodRouter);
     app.use(`${version.v1}/setting`, settingRouter);
     app.use(`${version.v1}/orders`, orderRouter);
+    app.use(`${version.v1}/notifications`, notificationRouter)
 };
 
 export = useRoutes;
