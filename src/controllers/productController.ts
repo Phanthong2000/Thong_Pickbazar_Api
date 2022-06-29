@@ -131,7 +131,13 @@ const getProductsByGroupId = (req: Request, res: Response, next: NextFunction) =
         {
             $addFields: {
                 'product.name': `$product.name_${langcode}`,
-                'product.groupObjectId': { $toObjectId: '$product.groupId' }
+                'product.groupObjectId': { $toObjectId: '$product.groupId' },
+                "product.toInt": { $toLong: '$product.createdAt' }
+            }
+        },
+        {
+            $sort: {
+                "product.toInt": 1
             }
         },
         {
@@ -144,10 +150,142 @@ const getProductsByGroupId = (req: Request, res: Response, next: NextFunction) =
         },
         {
             $unwind: '$product.group'
-        }
+        },
     ])
         .then((products) => res.status(200).json({ products }))
         .catch((error) => res.status(500).json({ error }));
 };
 
-export { findAllProducts, createProduct, deleteProduct, getProductsByGroupId };
+const getProductsByCategoryId = (req: Request, res: Response, next: NextFunction) => {
+    const { categoryId } = req.params;
+    const { langcode } = req.headers;
+    return Product.aggregate([
+        {
+            $addFields: {
+                quantity: {
+                    $switch: {
+                        branches: [
+                            {
+                                case: {
+                                    $eq: ['$type', 'simple']
+                                },
+                                then: '$simple.quantity'
+                            },
+                            {
+                                case: {
+                                    $eq: ['$type', 'variable']
+                                },
+                                then: '$variable.quantity'
+                            }
+                        ],
+                        default: 0
+                    }
+                }
+            }
+        },
+        {
+            $match: {
+                status: 'public',
+                quantity: { $gt: 0 }
+            }
+        },
+        {
+            $unwind: "$categories"
+        },
+        {
+            $match: {
+                categories: categoryId
+            }
+        },
+        {
+            $project: {
+                _id: 1
+            }
+        },
+        {
+            $addFields: {
+                productObjectId: { $toObjectId: '$_id' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'productObjectId',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $unwind: '$product'
+        },
+        {
+            $unwind: '$product.categories'
+        },
+        {
+            $addFields: {
+                "product.categoryObjectId": { $toObjectId: '$product.categories' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'categories',
+                localField: 'product.categoryObjectId',
+                foreignField: '_id',
+                as: 'product.category'
+            }
+        },
+        {
+            $unwind: '$product.category'
+        },
+        {
+            $group: {
+                _id: '$_id',
+                arrCategories: {
+                    $push: '$product.category'
+                }
+            }
+        },
+        {
+            $addFields: {
+                productObjectId: { $toObjectId: '$_id' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'productObjectId',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $unwind: '$product'
+        },
+        {
+            $addFields: {
+                'product.name': `$product.name_${langcode}`,
+                'product.groupObjectId': { $toObjectId: '$product.groupId' },
+                "product.toInt": { $toLong: '$product.createdAt' }
+            }
+        },
+        {
+            $sort: {
+                "product.toInt": 1
+            }
+        },
+        {
+            $lookup: {
+                from: 'groups',
+                localField: 'product.groupObjectId',
+                foreignField: '_id',
+                as: 'product.group'
+            }
+        },
+        {
+            $unwind: '$product.group'
+        },
+    ]).then((products) => res.status(200).json({ products }))
+        .catch((error) => res.status(500).json({ error }));
+}
+
+export { findAllProducts, createProduct, deleteProduct, getProductsByGroupId, getProductsByCategoryId };
