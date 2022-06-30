@@ -219,3 +219,11 @@ export interface NotificationType {
     messageId: string;
     orderId: string;
 }
+
+export interface ContactType {
+    email: string;
+    name: string;
+    subject: string;
+    isRead: boolean;
+    content: string;
+}

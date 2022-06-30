@@ -15,3 +15,4 @@ export * from './paymentMethodController';
 export * from './settingController';
 export * from './orderController';
 export * from './notificationController'
+export * from './contactController'

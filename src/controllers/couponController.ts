@@ -70,9 +70,16 @@ const getCouponsActive = (req: Request, res: Response, next: NextFunction) => {
             }
         },
         {
+            $addFields: {
+                toIntEndDay: {
+                    $add: ["$toInt", 86400000]
+                }
+            }
+        },
+        {
             $match: {
                 fromInt: { $lte: toDay },
-                toInt: { $gte: toDay }
+                toIntEndDay: { $gte: toDay }
             }
         },
         {
