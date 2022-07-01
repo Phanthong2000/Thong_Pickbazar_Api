@@ -16,8 +16,8 @@ const registry = (req: Request, res: Response, next: NextFunction) => {
             } else {
                 return Role.findOne({ name: role })
                     .then((role) => {
-                        var salt = bcrypt.genSaltSync(parseInt(SALT));
-                        var hash = bcrypt.hashSync(data.password, salt);
+                        const salt = bcrypt.genSaltSync(parseInt(SALT));
+                        const hash = bcrypt.hashSync(data.password, salt);
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
                             ...data,
@@ -113,4 +113,54 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
     }
 };
 
-export { registry, login, refreshToken };
+const changePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const data = req.body;
+        const userById = await User.aggregate([
+            {
+                $addFields: {
+                    id: { $toString: "$_id" }
+                }
+            },
+            {
+                $match: {
+                    id: data.id
+                }
+            }
+        ]);
+        if (userById) {
+            if (bcrypt.compareSync(data.oldPassword, userById[0].password)) {
+                const salt = bcrypt.genSaltSync(parseInt(SALT));
+                const hash = bcrypt.hashSync(data.newPassword, salt);
+                const newUser = {
+                    ...userById[0],
+                    password: hash
+                }
+                const accessToken = await generateToken(newUser, process.env.ACCESS_TOKEN_SECRET, process.env.ACCESS_TOKEN_LIFE);
+                const refreshToken = await generateToken(newUser, process.env.REFRESH_TOKEN_SECRET, process.env.REFRESH_TOKEN_LIFE);
+                await User.findByIdAndUpdate(
+                    newUser.id,
+                    {
+                        ...newUser,
+                        refreshToken: refreshToken
+                    },
+                    { returnOriginal: false }
+                );
+                return res.status(200).json({
+                    user: {
+                        ...newUser,
+                        accessToken: accessToken,
+                        refreshToken: refreshToken
+                    }
+                });
+            } else {
+                return res.status(409).json({ user: "Password is incorrect" });
+            }
+        }
+
+    } catch (error) {
+        return res.status(500).json({ error })
+    }
+}
+
+export { registry, login, refreshToken, changePassword };

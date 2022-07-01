@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { UserType } from '../interfaces';
 
-export interface UserModel extends UserType, Document {}
+export interface UserModel extends UserType, Document { }
 
 const UserSchema = new Schema(
     {
@@ -11,7 +11,7 @@ const UserSchema = new Schema(
         avatar: { type: String, required: true },
         birthday: { type: Date, required: false },
         status: { type: String, required: true },
-        address: { type: Object, required: true },
+        address: { type: Object, required: false },
         username: { type: String, required: true },
         password: { type: String, required: true },
         roleId: { type: String, required: true },

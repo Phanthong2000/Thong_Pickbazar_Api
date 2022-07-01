@@ -4,7 +4,7 @@ import { authorize } from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/list', authorize(["ADMIN"]), findAllOrders);
+router.get('/list', findAllOrders);
 router.post('/create', createOrder);
 router.put('/edit', authorize(["ADMIN"]), updateOrder);
 router.delete('/delete/:id', authorize(["ADMIN"]), deleteOrder);
