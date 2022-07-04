@@ -143,6 +143,90 @@ const deleteOrder = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
+const getOrderByCustomerId = (req: Request, res: Response, next: NextFunction) => {
+    const { customerId } = req.params;
+    return Order.aggregate([
+        {
+            $match: {
+                customerId
+            }
+        },
+        {
+            $addFields: {
+                id: { $toString: '$_id' },
+                orderDateInt: { $toLong: '$createdAt' }
+            }
+        },
+        {
+            $lookup: {
+                from: 'orderStatuses',
+                localField: 'orderStatus',
+                foreignField: 'serial',
+                as: 'orderStatusOrder'
+            }
+        },
+        {
+            $unwind: '$orderStatusOrder'
+        },
+        {
+            $sort: {
+                orderDateInt: -1
+            }
+        }
+    ])
+        .then((orders) => res.status(200).json({ orders }))
+        .catch((error) => res.status(500).json({ error }));
+};
+
+const getAnalyticOrderByCustomer = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { customerId } = req.params;
+        const total = await Order.find({ customerId });
+
+        const orderStatus = await Order.aggregate([
+            {
+                $match: {
+                    customerId
+                }
+            },
+            {
+                $group: {
+                    _id: '$orderStatus',
+                    quantity: { $sum: 1 }
+                }
+            },
+            {
+                $sort: {
+                    _id: 1
+                }
+            }
+        ]);
+        let waitingDelivery = 0;
+        let delivered = 0;
+        orderStatus.forEach((item) => {
+            if (item._id === 1 || item._id === 2 || item._id === 3) {
+                waitingDelivery += item.quantity;
+            } else if (item._id === 4) {
+                delivered += item.quantity;
+            }
+        });
+        return res.status(200).json({
+            result: [
+                {
+                    name: 'allOrders',
+                    quantity: total.length
+                },
+                { name: 'waitingDelivery', quantity: waitingDelivery },
+                {
+                    name: 'delivered',
+                    quantity: delivered
+                }
+            ]
+        });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
 const getAnalyticDashboard = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const startToday = Date.parse(moment(new Date().getTime()).format(`YYYY/MM/DD`));
@@ -667,4 +751,4 @@ const topCustomer = (req: Request, res: Response, next: NextFunction) => {
         .then((orders) => res.status(200).json({ orders }))
         .catch((error) => res.status(500).json({ error }));
 };
-export { findAllOrders, createOrder, updateOrder, deleteOrder, getOrderById, getAnalyticDashboard, topCustomer };
+export { findAllOrders, createOrder, updateOrder, deleteOrder, getOrderById, getAnalyticDashboard, topCustomer, getOrderByCustomerId, getAnalyticOrderByCustomer };

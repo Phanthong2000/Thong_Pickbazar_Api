@@ -3,7 +3,14 @@ import OrderStatus from '../models/orderStatus';
 import mongoose from 'mongoose';
 
 const findAllOrderStatus = (req: Request, res: Response, next: NextFunction) => {
-    return OrderStatus.aggregate([{ $sort: { serial: 1 } }])
+    return OrderStatus.aggregate([
+        {
+            $addFields: {
+                id: { $toString: '$_id' }
+            }
+        },
+        { $sort: { serial: 1 } }
+    ])
         .then((orderStatuses) => res.status(200).json({ orderStatuses }))
         .catch((error) => res.status(500).json({ error }));
 };
@@ -26,6 +33,13 @@ const findOrderStatusById = (req: Request, res: Response, next: NextFunction) =>
         .catch((error) => res.status(500).json({ error }));
 };
 
+const deleteOrderStatus = (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    return OrderStatus.findByIdAndDelete(id)
+        .then((orderStatus) => res.status(200).json({ orderStatus }))
+        .catch((error) => res.status(500).json({ error }));
+};
+
 const updateOrderStatus = (req: Request, res: Response, next: NextFunction) => {
     const data = req.body;
     return OrderStatus.findByIdAndUpdate(data.id, { ...data }, { returnOriginal: false })
@@ -33,4 +47,4 @@ const updateOrderStatus = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-export { findAllOrderStatus, createOrderStatus, findOrderStatusById, updateOrderStatus };
+export { findAllOrderStatus, createOrderStatus, findOrderStatusById, updateOrderStatus, deleteOrderStatus };

@@ -132,12 +132,12 @@ const getProductsByGroupId = (req: Request, res: Response, next: NextFunction) =
             $addFields: {
                 'product.name': `$product.name_${langcode}`,
                 'product.groupObjectId': { $toObjectId: '$product.groupId' },
-                "product.toInt": { $toLong: '$product.createdAt' }
+                'product.toInt': { $toLong: '$product.createdAt' }
             }
         },
         {
             $sort: {
-                "product.toInt": 1
+                'product.toInt': 1
             }
         },
         {
@@ -150,7 +150,7 @@ const getProductsByGroupId = (req: Request, res: Response, next: NextFunction) =
         },
         {
             $unwind: '$product.group'
-        },
+        }
     ])
         .then((products) => res.status(200).json({ products }))
         .catch((error) => res.status(500).json({ error }));
@@ -190,7 +190,7 @@ const getProductsByCategoryId = (req: Request, res: Response, next: NextFunction
             }
         },
         {
-            $unwind: "$categories"
+            $unwind: '$categories'
         },
         {
             $match: {
@@ -223,7 +223,7 @@ const getProductsByCategoryId = (req: Request, res: Response, next: NextFunction
         },
         {
             $addFields: {
-                "product.categoryObjectId": { $toObjectId: '$product.categories' }
+                'product.categoryObjectId': { $toObjectId: '$product.categories' }
             }
         },
         {
@@ -265,12 +265,12 @@ const getProductsByCategoryId = (req: Request, res: Response, next: NextFunction
             $addFields: {
                 'product.name': `$product.name_${langcode}`,
                 'product.groupObjectId': { $toObjectId: '$product.groupId' },
-                "product.toInt": { $toLong: '$product.createdAt' }
+                'product.toInt': { $toLong: '$product.createdAt' }
             }
         },
         {
             $sort: {
-                "product.toInt": 1
+                'product.toInt': 1
             }
         },
         {
@@ -283,9 +283,10 @@ const getProductsByCategoryId = (req: Request, res: Response, next: NextFunction
         },
         {
             $unwind: '$product.group'
-        },
-    ]).then((products) => res.status(200).json({ products }))
+        }
+    ])
+        .then((products) => res.status(200).json({ products }))
         .catch((error) => res.status(500).json({ error }));
-}
+};
 
 export { findAllProducts, createProduct, deleteProduct, getProductsByGroupId, getProductsByCategoryId };
